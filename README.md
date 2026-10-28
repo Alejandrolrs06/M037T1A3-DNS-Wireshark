@@ -31,29 +31,29 @@ Se observa que solo existe una ruta por defecto válida a través de la interfaz
 
 **5. Verificación de reglas NAT:**
 Comprobación de que las reglas de NAT se han aplicado correctamente.
-![Verificación iptables](img5.png)
+![Verificación iptables](img/img5.png)
 
 **6. Servicio dnsmasq en ejecución:**
 Comprobación de que el servicio está activo (`active (running)`), mostrando el rango DHCP y el servidor DNS al que reenvía.
-![Status dnsmasq](img6.png)
+![Status dnsmasq](img/img6.png)
 
 **7. Verificación de reenvío DNS (Root Servers):**
 Consulta al servidor local (`dnsmasq`) para obtener la lista de servidores raíz, demostrando que el reenvío a Internet funciona.
-![Dig root servers](img7.png)
+![Dig root servers](img/img7.png)
 
 ### Pruebas desde el Cliente Debian
 
 **8. Resolución DNS con nslookup:**
 El cliente pregunta al servidor (`192.168.6.25`) y obtiene las IPs correctas para `www.iana.org`.
-![Nslookup cliente](img8.png)
+![Nslookup cliente](img/img8.png)
 
 **9. Conectividad con la puerta de enlace (Servidor Ubuntu):**
 Ping exitoso desde el cliente al servidor.
-![Ping gateway](img9.png)
+![Ping gateway](img/img9.png)
 
 **10. Conectividad a Internet (Salida NAT):**
 Ping exitoso desde el cliente a `8.8.8.8`, demostrando que el NAT del servidor está funcionando.
-![Ping internet](img10.png)
+![Ping internet](img/img10.png)
 
 ---
 
@@ -67,19 +67,19 @@ Capturando el tráfico en la interfaz del cliente, observamos el comportamiento 
 3.  **Seguridad y Cifrado:** Los datos **NO están cifrados**. Se puede leer en texto plano el campo `Queries` con el nombre del dominio.
 
 **11. Wireshark - Petición a www.iana.org (Texto plano):**
-![Wireshark iana](img11.png)
+![Wireshark iana](img/img11.png)
 
 **12. Wireshark - Petición a www.nlnetlabs.nl (Texto plano):**
-![Wireshark nlnetlabs](img12.png)
+![Wireshark nlnetlabs](img/img12.png)
 
 **13. Wireshark - Petición a www.potaroo.net (Texto plano):**
-![Wireshark potaroo](img13.png)
+![Wireshark potaroo](img/img13.png)
 
 ### Gráfico del camino de la petición DNS
 El siguiente diagrama ilustra el recorrido de la consulta desde el cliente hasta Internet y su retorno:
 
 **14. Diagrama del camino de la petición DNS (Draw.io):**
-![Gráfico Camino DNS](img14.png)
+![Gráfico Camino DNS](img/img14.png)
 
 ---
 
@@ -88,11 +88,11 @@ Para mitigar el problema de privacidad, se ha configurado **DNS sobre HTTPS (DoH
 
 **15. Configuración de DoH en Firefox:**
 Activación del DNS sobre HTTPS en los ajustes de privacidad del navegador.
-![Configuración DoH Firefox](img15.png)
+![Configuración DoH Firefox](img/img15.png)
 
 **16. Limpieza de la caché DNS del navegador:**
 Se accede a `about:networking#dns` para borrar la caché y forzar nuevas consultas cifradas.
-![Limpieza Caché Firefox](img16.png)
+![Limpieza Caché Firefox](img/img16.png)
 
 ### Análisis en Wireshark tras la implementación
 Tras limpiar la caché y repetir las peticiones:
@@ -101,10 +101,10 @@ Tras limpiar la caché y repetir las peticiones:
 2.  **Filtro `tcp.port == 443`:** Se comprueba que las consultas han sido encapsuladas dentro de tráfico **HTTPS cifrado (TLSv1.3)** hacia las IPs de Cloudflare. Para un administrador de red, es indistinguible de la navegación web normal.
 
 **17. Wireshark - El DNS tradicional desaparece (Filtro `dns`):**
-![Wireshark DoH DNS](img17.png)
+![Wireshark DoH DNS](img/img17.png)
 
 **18. Wireshark - Las consultas ahora viajan cifradas en el puerto 443:**
-![Wireshark TLS](img18.png)
+![Wireshark TLS](img/img18.png)
 
 ### Conclusión
 La implementación de DoH demuestra una mejora drástica en la seguridad del servicio DNS. Mientras que con el DNS tradicional (Tarea 1) cualquier atacante en la red podía hacer *sniffing* y descubrir los hábitos de navegación, con DoH las consultas viajan cifradas. Esto evita ataques de espionaje e incluso ataques *Man-in-the-Middle* (MitM) donde se pudiera falsificar la respuesta DNS para redirigir el tráfico.
