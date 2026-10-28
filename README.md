@@ -15,19 +15,19 @@ Para la realización de esta práctica se ha desplegado un laboratorio con dos m
 
 **1. Configuración de interfaces de red (Netplan):**
 Asignación de IP estática a la interfaz de red interna (`enp0s8`) y salida a Internet por la interfaz NAT.
-![Configuración Netplan](img1.png)
+![Configuración Netplan](img/img1.png)
 
 **2. Configuración del servicio dnsmasq:**
 Archivo de configuración donde se define la interfaz de escucha, el rango DHCP y el reenvío de peticiones DNS.
-![Configuración dnsmasq](img2.png)
+![Configuración dnsmasq](img/img2.png)
 
 **3. Comprobación de direcciones IP y configuración de NAT (iptables):**
 Asignación de IPs en ambas interfaces y aplicación de las reglas de enmascaramiento (MASQUERADE) y permisos en la cadena FORWARD.
-![Comprobación IP y reglas iptables](img3.png)
+![Comprobación IP y reglas iptables](img/img3.png)
 
 **4. Verificación de la tabla de rutas:**
 Se observa que solo existe una ruta por defecto válida a través de la interfaz NAT (`enp0s3`), evitando conflictos.
-![Tabla de rutas](img4.png)
+![Tabla de rutas](img/img4.png)
 
 **5. Verificación de reglas NAT:**
 Comprobación de que las reglas de NAT se han aplicado correctamente.
