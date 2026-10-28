@@ -15,44 +15,54 @@ Para la realización de esta práctica se ha desplegado un laboratorio con dos m
 
 **1. Configuración de interfaces de red (Netplan):**
 Asignación de IP estática a la interfaz de red interna (`enp0s8`) y salida a Internet por la interfaz NAT.
+<br>
 ![Configuración Netplan](img/img1.png)
 
 **2. Configuración del servicio dnsmasq:**
 Archivo de configuración donde se define la interfaz de escucha, el rango DHCP y el reenvío de peticiones DNS.
+<br>
 ![Configuración dnsmasq](img/img2.png)
 
 **3. Comprobación de direcciones IP y configuración de NAT (iptables):**
 Asignación de IPs en ambas interfaces y aplicación de las reglas de enmascaramiento (MASQUERADE) y permisos en la cadena FORWARD.
+<br>
 ![Comprobación IP y reglas iptables](img/img3.png)
 
 **4. Verificación de la tabla de rutas:**
 Se observa que solo existe una ruta por defecto válida a través de la interfaz NAT (`enp0s3`), evitando conflictos.
+<br>
 ![Tabla de rutas](img/img4.png)
 
 **5. Verificación de reglas NAT:**
 Comprobación de que las reglas de NAT se han aplicado correctamente.
+<br>
 ![Verificación iptables](img/img5.png)
 
 **6. Servicio dnsmasq en ejecución:**
 Comprobación de que el servicio está activo (`active (running)`), mostrando el rango DHCP y el servidor DNS al que reenvía.
+<br>
 ![Status dnsmasq](img/img6.png)
 
 **7. Verificación de reenvío DNS (Root Servers):**
 Consulta al servidor local (`dnsmasq`) para obtener la lista de servidores raíz, demostrando que el reenvío a Internet funciona.
+<br>
 ![Dig root servers](img/img7.png)
 
 ### Pruebas desde el Cliente Debian
 
 **8. Resolución DNS con nslookup:**
 El cliente pregunta al servidor (`192.168.6.25`) y obtiene las IPs correctas para `www.iana.org`.
+<br>
 ![Nslookup cliente](img/img8.png)
 
 **9. Conectividad con la puerta de enlace (Servidor Ubuntu):**
 Ping exitoso desde el cliente al servidor.
+<br>
 ![Ping gateway](img/img9.png)
 
 **10. Conectividad a Internet (Salida NAT):**
 Ping exitoso desde el cliente a `8.8.8.8`, demostrando que el NAT del servidor está funcionando.
+<br>
 ![Ping internet](img/img10.png)
 
 ---
@@ -67,18 +77,22 @@ Capturando el tráfico en la interfaz del cliente, observamos el comportamiento 
 3.  **Seguridad y Cifrado:** Los datos **NO están cifrados**. Se puede leer en texto plano el campo `Queries` con el nombre del dominio.
 
 **11. Wireshark - Petición a www.iana.org (Texto plano):**
+<br>
 ![Wireshark iana](img/img11.png)
 
 **12. Wireshark - Petición a www.nlnetlabs.nl (Texto plano):**
+<br>
 ![Wireshark nlnetlabs](img/img12.png)
 
 **13. Wireshark - Petición a www.potaroo.net (Texto plano):**
+<br>
 ![Wireshark potaroo](img/img13.png)
 
 ### Gráfico del camino de la petición DNS
 El siguiente diagrama ilustra el recorrido de la consulta desde el cliente hasta Internet y su retorno:
 
 **14. Diagrama del camino de la petición DNS (Draw.io):**
+<br>
 ![Gráfico Camino DNS](img/img14.png)
 
 ---
@@ -88,10 +102,12 @@ Para mitigar el problema de privacidad, se ha configurado **DNS sobre HTTPS (DoH
 
 **15. Configuración de DoH en Firefox:**
 Activación del DNS sobre HTTPS en los ajustes de privacidad del navegador.
+<br>
 ![Configuración DoH Firefox](img/img15.png)
 
 **16. Limpieza de la caché DNS del navegador:**
 Se accede a `about:networking#dns` para borrar la caché y forzar nuevas consultas cifradas.
+<br>
 ![Limpieza Caché Firefox](img/img16.png)
 
 ### Análisis en Wireshark tras la implementación
@@ -101,9 +117,11 @@ Tras limpiar la caché y repetir las peticiones:
 2.  **Filtro `tcp.port == 443`:** Se comprueba que las consultas han sido encapsuladas dentro de tráfico **HTTPS cifrado (TLSv1.3)** hacia las IPs de Cloudflare. Para un administrador de red, es indistinguible de la navegación web normal.
 
 **17. Wireshark - El DNS tradicional desaparece (Filtro `dns`):**
+<br>
 ![Wireshark DoH DNS](img/img17.png)
 
 **18. Wireshark - Las consultas ahora viajan cifradas en el puerto 443:**
+<br>
 ![Wireshark TLS](img/img18.png)
 
 ### Conclusión
